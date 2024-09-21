@@ -11,7 +11,7 @@
 
 ### Assignment Progress 
 
-- [Assignment Week 2](/task-1/)
+- [Assignment Week 2](/assignment-week-2/)
 
 #### Assignment Week 2
 **Assignment Description**

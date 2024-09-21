@@ -9,11 +9,13 @@
 
 </div>
 
-### Assignment Progress 
+## Assignment Progress 
 
 - [Assignment Week 2](#assignment-week-2)
+- [Assignment Week 3](#assignment-week-3)
+- [Assignment Week 4](#assignment-week-4)
 
-#### Assignment Week 2
+## Assignment Week 2
 **Assignment Description**
 
 In week 2, the progress is up to the fifth video from *_Web Programming UNPAS_* YT channel where I learn to install and set up all tools needed for the Laravel 11 Project, Deepen my knowledge regarding the folder structure of Laravel, and Blade Templating Engine.
@@ -119,4 +121,16 @@ It is used to make the attributes of the navbar active when it is clicked by the
 **Output for the assignment look**
 
 <img width="1470" alt="Screenshot 2024-09-11 at 10 31 59" src="https://github.com/user-attachments/assets/adca6014-81a1-4b40-a2a6-340be5aa6a69">
+
+## Assignment Week 3
+
+### View Data
+
+### Model
+
+## Assignment Week 4
+
+### Database and Migration
+
+### Eloquent ORM & Post Model
 

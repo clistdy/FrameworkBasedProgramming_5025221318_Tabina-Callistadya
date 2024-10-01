@@ -294,11 +294,98 @@ There are 3 logical operator that i learned from this video:
 
 ### Eloquent Relationship _(Video 11)_
 
+Based on previous video, the author of the post is still manually generated and is not connected to User table. In this video, the author will be assigned as a foreign key in table users. To do this, we need to find the relation. Beforehand, make sure that the author of each post is strictly one author. One author can have many posts. To join 2 tables, an index, foreign key is needed. Set the `author_id` references `id` in User tables where it will resulting a constraints.
+
+<img width="598" alt="Screenshot 2024-10-01 at 19 44 05" src="https://github.com/user-attachments/assets/3c382e05-e0b7-4321-8984-1176aa4605e3">
+
+Remigrate our database while we change the table structure.
+
+<img width="1028" alt="Screenshot 2024-10-01 at 19 46 20" src="https://github.com/user-attachments/assets/fa5df540-5434-4e58-aaee-2395d30017cb">
+
+Reconnect the TablePlus, it can be seen in the `Posts` table that `author_id` has a foreign key named `id`.
+
+<img width="580" alt="Screenshot 2024-10-01 at 19 47 06" src="https://github.com/user-attachments/assets/21fe1f05-7052-47ea-ae4b-35cb050f8c32">
+
+If you also want to create an index, do it using constrains.
+
+<img width="508" alt="Screenshot 2024-10-01 at 19 50 30" src="https://github.com/user-attachments/assets/22e26bc5-0eb6-410a-bc23-3468e260e492">
+
+Dont forget to remigrate the database and reconnect it because theres a change in the table structure.
+
+<img width="1028" alt="Screenshot 2024-10-01 at 19 52 45" src="https://github.com/user-attachments/assets/69b9baea-65ff-448a-930b-57616980960c">
+
+<img width="601" alt="Screenshot 2024-10-01 at 19 53 31" src="https://github.com/user-attachments/assets/36a53e8b-8365-4ab1-aed1-7e6f70b84a5a">
+
+Make 10 data post using factory, but beforehand we need to modify it from the previous video. Firstly is to change `author` to `author_id` in PostFactory.php and connect it to the User factory. So we can generate id while making a new factory
+
+<img width="450" alt="Screenshot 2024-10-01 at 19 55 55" src="https://github.com/user-attachments/assets/52b91eb6-bea1-4bef-8ec6-f46d5dee10fa">
+
+run `php artisan tinker` and create 10. 
+
+<img width="1017" alt="Screenshot 2024-10-01 at 19 58 10" src="https://github.com/user-attachments/assets/f574cd0d-3bc6-4a64-8c3d-b45fad86bf4f">
+
+It can be seen that theres 10 posts in posts table in TablePlus and at the same time, it also generates 10 data in user table.
+
+<img width="828" alt="Screenshot 2024-10-01 at 19 59 46" src="https://github.com/user-attachments/assets/990e1e84-4661-4b54-ab04-55bd96dd1063">
+
+<img width="756" alt="Screenshot 2024-10-01 at 19 59 59" src="https://github.com/user-attachments/assets/7ae8a126-ce0f-4350-8a70-dae444956093">
+
+Now lets try to randomize it using `recycle`. By running `App\Models\Post::factory(100)->recycle(User::factory(5)->create())->create();`, it means that we are creating 100 posts with 5 users only and randomize it using `recycle`.
+As can be seen in the Users table that there are only 5 users
+
+<img width="789" alt="Screenshot 2024-10-01 at 20 51 27" src="https://github.com/user-attachments/assets/e60681d4-8d95-45c6-af5f-ea50deacc7de">
+
+while there are 100 posts in posts table and writen by only 5 users (one user for each post):
+
+<img width="790" alt="Screenshot 2024-10-01 at 20 56 28" src="https://github.com/user-attachments/assets/7826dbb3-fc7a-46bc-ba7d-25bafbe44a34">
+
+But the author is not displayed in our web UI.
+<img width="1470" alt="Screenshot 2024-10-01 at 20 59 32" src="https://github.com/user-attachments/assets/20649ec4-7deb-463e-872f-7a4f313d57a2">
+
+To fix this, add a relation in `Post.php`. 
+
+<img width="491" alt="Screenshot 2024-10-01 at 21 04 36" src="https://github.com/user-attachments/assets/6c703b3d-4c39-49b7-b88d-ae0e75e0ead0">
+
+Next, make the relation in `User.php`. We need to tell laravel that the foreign key is `author_id`.
+
+<img width="519" alt="Screenshot 2024-10-01 at 21 09 04" src="https://github.com/user-attachments/assets/566ff460-afd2-4c8a-96f8-7a1fef00a3f9">
+
+After joining the tables, we can know how many posts did the author write. 
+<img width="583" alt="Screenshot 2024-10-01 at 21 10 52" src="https://github.com/user-attachments/assets/11c234c3-0c37-4b2d-a791-4773c1135041">
+
+Now we can collect from `post` table and call the relation method which is `author`, and call the `name`.
+
+<img width="974" alt="Screenshot 2024-10-01 at 21 13 32" src="https://github.com/user-attachments/assets/06f9a93a-bbf9-4b1f-86a6-9e4445ee
+
+And the web UI is finally fixed. This is called `lazy loading`, but we need to be careful because it might affect our performance in the future.
+
+<img width="1470" alt="Screenshot 2024-10-01 at 21 14 12" src="https://github.com/user-attachments/assets/74189a7d-d856-4d3f-bbbb-a7958bc382fe">
+9532">
+
+Lastly in this video, we will make a new feature where whenever we click the author, it will display all the posts that has been writen by the selected author. Add hover underline effect too in each author.
+
+<img width="973" alt="Screenshot 2024-10-01 at 21 18 59" src="https://github.com/user-attachments/assets/ab6777fc-fc3c-4c50-9f8d-cedcbe23cc0b">
+
+Make the route to `/authors` in `web.php` where we will also taking advantages of relation that we have created beforehand. 
+
+<img width="819" alt="Screenshot 2024-10-01 at 21 24 31" src="https://github.com/user-attachments/assets/609063a7-bcaf-45f6-8e9e-f1c26aff08b3">
+
+And there we go, it displays all articles that are writen by the selected author
+
+<img width="1470" alt="Screenshot 2024-10-01 at 21 25 22" src="https://github.com/user-attachments/assets/3946084f-1ec3-449c-8ece-604f7003ba60">
+
+Lastly, we need to update the link route in the `post.blade.php`.
+
+<img width="1037" alt="Screenshot 2024-10-01 at 21 28 50" src="https://github.com/user-attachments/assets/5e4ef38a-5527-4063-b176-5c3ceabd1038">
+
 ### Post Category _(Video 12)_
+
 
 ### Database Seeder _(Video 13)_
 
 ## Assignment Week 6
+
+
 
 
 

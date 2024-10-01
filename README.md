@@ -15,6 +15,7 @@
 - [Assignment Week 3](#assignment-week-3)
 - [Assignment Week 4](#assignment-week-4)
 - [Assignment Week 5](#assignment-week-5)
+- [Assignment Week 6](#assignment-week-6)
 
 ## Assignment Week 2
 **Assignment Description**
@@ -297,7 +298,7 @@ There are 3 logical operator that i learned from this video:
 
 ### Database Seeder _(Video 13)_
 
-
+## Assignment Week 6
 
 
 

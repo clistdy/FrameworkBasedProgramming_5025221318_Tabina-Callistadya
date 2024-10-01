@@ -209,6 +209,87 @@ Lastly, insert our data manually from `post.php` to TablePlus and save it.
 ## Assignment Week 5
 
 ### Model Factories _(Video 10)_
+In this video, I learn how the usage of model factories where it will benefits us in inserting data automatically. To write a factory, the file is located inside `database` folder. Defaultly, the `factories` folder consist of `UserFactory.php`. To run factory, use `php artisan tinker` in terminal. And now lets try to input one new data user that have a password that has been hashing before.
+
+<img width="617" alt="Screenshot 2024-09-30 at 16 41 09" src="https://github.com/user-attachments/assets/2d633d54-c524-4d05-aaa2-5fa1322b43a8">
+
+It can also be seen in TablePlus as below:
+
+<img width="799" alt="Screenshot 2024-09-30 at 16 41 38" src="https://github.com/user-attachments/assets/026c04fc-c3e6-4d9c-bf90-1c6d5c365756">
+
+This is an example if we want to generate 10 new user:
+
+<img width="647" alt="Screenshot 2024-09-30 at 16 42 54" src="https://github.com/user-attachments/assets/cfd76135-3eb9-4b8a-a0fd-da30de341717">
+
+<img width="762" alt="Screenshot 2024-09-30 at 16 42 59" src="https://github.com/user-attachments/assets/dad59b59-19f5-4a6a-9e4a-fa99f93ad688">
+
+Trying to add a new column named `is_admin` where defaultly it will be marked as false.
+
+<img width="725" alt="Screenshot 2024-09-30 at 16 46 50" src="https://github.com/user-attachments/assets/a48fe018-8084-48f6-bc83-4b3b36549215">
+
+And add a new method simillar to `unverified` method namely `admin` and set the value to true.
+
+<img width="489" alt="Screenshot 2024-09-30 at 16 47 54" src="https://github.com/user-attachments/assets/6eae97ca-f226-4eb3-bffa-93acd07ca176">
+
+Remigrate our database
+
+<img width="1046" alt="Screenshot 2024-09-30 at 16 48 34" src="https://github.com/user-attachments/assets/af19feec-757e-4f36-82e3-0d744dfa73cd">
+
+<img width="785" alt="Screenshot 2024-09-30 at 16 49 24" src="https://github.com/user-attachments/assets/762c9ed4-d703-47d1-b322-d415a3540767">
+
+With `is_admin` added, create 10 new user using factory:
+
+<img width="354" alt="Screenshot 2024-09-30 at 16 50 07" src="https://github.com/user-attachments/assets/4b184713-7f17-40fb-be49-644e376025c8">
+
+<img width="616" alt="Screenshot 2024-09-30 at 16 50 14" src="https://github.com/user-attachments/assets/1c76eba5-3e94-4155-b103-4350135342c5">
+
+Add 5 user whom their email is marked unverified:
+
+<img width="625" alt="Screenshot 2024-09-30 at 16 51 27" src="https://github.com/user-attachments/assets/501edf90-6a9d-4f37-8974-18ff135eac30">
+
+<img width="570" alt="Screenshot 2024-09-30 at 16 51 43" src="https://github.com/user-attachments/assets/a3fe4957-eee4-4a27-889a-74c1c3a62e74">
+
+Add 1 user and mark it as admin:
+
+<img width="634" alt="Screenshot 2024-09-30 at 16 52 13" src="https://github.com/user-attachments/assets/e0fe4cf1-4577-4c0e-9cfc-89c7dfb55728">
+
+<img width="584" alt="Screenshot 2024-09-30 at 16 52 24" src="https://github.com/user-attachments/assets/689fa58e-c7ff-469d-9dc6-ef93057c1cbf">
+
+Next, try to change the faker language to another language so the result will adjust to the selected country:
+
+<img width="363" alt="Screenshot 2024-09-30 at 17 03 09" src="https://github.com/user-attachments/assets/d85b86df-554c-442d-ad95-0f1bd447e34d">
+
+And generate 100 new user data:
+
+<img width="832" alt="Screenshot 2024-09-30 at 17 08 06" src="https://github.com/user-attachments/assets/7fc5aa05-e4d3-42af-9627-e0f238ff4f99">
+
+Next, make our own factory class for Post model so name it `PostFactory`
+
+<img width="610" alt="Screenshot 2024-09-30 at 17 08 51" src="https://github.com/user-attachments/assets/2a391209-9277-4eb6-9438-ccc16003a6d8">
+
+Modify and fill each field for our post model which are title, author, slug, and body. We will use helper faker to fill each field.
+
+<img width="410" alt="Screenshot 2024-09-30 at 17 13 39" src="https://github.com/user-attachments/assets/aae921d9-41d8-47b7-90d3-112a6470fd99">
+
+Generate 200 new posts using our PostFactory:
+
+<img width="1049" alt="Screenshot 2024-09-30 at 17 14 14" src="https://github.com/user-attachments/assets/44886c25-469a-40b5-91e7-32a2423eae0c">
+
+<img width="827" alt="Screenshot 2024-09-30 at 17 14 35" src="https://github.com/user-attachments/assets/d8733354-ae6b-40bc-ad48-fabebd7c7f84">
+
+And it has successfully been made:
+
+<img width="1470" alt="Screenshot 2024-09-30 at 17 15 15" src="https://github.com/user-attachments/assets/deb10579-f33b-47d1-99a9-f6a8217dd2d5">
+
+**Additional**
+There are 3 logical operator that i learned from this video:
+
+-Ternary Operator
+`$a = $a ? $a : $b;`
+-Elvis Operator
+`$a = $a ?: $b;`
+-Null Coalescing Operator
+`$a ??= $b;`
 
 ### Eloquent Relationship _(Video 11)_
 

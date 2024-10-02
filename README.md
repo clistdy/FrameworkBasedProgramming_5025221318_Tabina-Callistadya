@@ -380,6 +380,95 @@ Lastly, we need to update the link route in the `post.blade.php`.
 
 ### Post Category _(Video 12)_
 
+Add a new variable `username` and dont forget to set it `unique` so there cant be 2 exact same username.
+
+<img width="654" alt="Screenshot 2024-10-02 at 11 54 36" src="https://github.com/user-attachments/assets/5ada7d86-746c-45e5-b340-883a922bd3b6">
+
+And dont forget to add it too in the factory.
+
+<img width="726" alt="Screenshot 2024-10-02 at 11 54 27" src="https://github.com/user-attachments/assets/9d7520b2-b271-45f0-88d6-cc54a4581285">
+
+remigrate our database and generate 100 posts using factory and recycle the user model. There will be only 5 users.
+
+<img width="1027" alt="Screenshot 2024-10-02 at 12 10 14" src="https://github.com/user-attachments/assets/d76176df-784a-429e-a45c-8f98eabd0217">
+
+<img width="1036" alt="Screenshot 2024-10-02 at 12 11 06" src="https://github.com/user-attachments/assets/51f2504a-6198-45ef-b74a-84b3ec16e07a">
+
+It can be seen in our web UI
+<img width="227" alt="Screenshot 2024-10-02 at 12 12 47" src="https://github.com/user-attachments/assets/806fba11-a2c8-45a4-93c9-7d216e78f49b">
+
+Next is to differ the clickable text by modifying it inside the div container inside `posts.blade.php`
+<img width="933" alt="Screenshot 2024-10-02 at 12 19 04" src="https://github.com/user-attachments/assets/d32f75e7-7ed1-4fb6-a01b-196bcd2a6260">
+
+
+Notice the color difference between the clickable text and non clickable in our Web UI. But when we click it, it will display error since it still searching for the id.
+<img width="488" alt="Screenshot 2024-10-02 at 12 17 12" src="https://github.com/user-attachments/assets/ade56683-08a7-4b83-b472-ff65995a475b">
+
+To fix it, route it to username instead of id in `web.php`. And add a count feature to easily know how many articles have the writer wrote.
+
+<img width="909" alt="Screenshot 2024-10-02 at 12 22 07" src="https://github.com/user-attachments/assets/f242c458-9fab-4030-9520-422dafcbb6b6">
+
+In the web UI:
+
+<img width="1470" alt="Screenshot 2024-10-02 at 12 23 22" src="https://github.com/user-attachments/assets/77277404-b691-4c2e-a923-6940d558f6e9">
+
+And now we will modify the post category so it will work like how we modify the user. To achieve this, we will make a new model, migration, and factory in the terminal. `-mf` here means we will also be creating migration and factory as well with the model.
+
+<img width="801" alt="Screenshot 2024-10-02 at 12 26 29" src="https://github.com/user-attachments/assets/7f2ab718-6002-458a-a2a4-3c2c1a964462">
+
+The first thing to do is to modify the migration first. Add name for category name and also it slug.
+<img width="529" alt="Screenshot 2024-10-02 at 12 27 41" src="https://github.com/user-attachments/assets/134f7d4b-07be-4e5a-9e41-0c198f730324">
+
+Dont forget to modify the post migration because we will connect the id as the foreign key.
+
+<img width="420" alt="Screenshot 2024-10-02 at 12 29 44" src="https://github.com/user-attachments/assets/405d74e1-cb8c-41ed-b596-65db5ad17e29">
+
+Next we will make model relations. Firstly in `Category.php` model. This mean one category could have many posts.
+
+<img width="479" alt="Screenshot 2024-10-02 at 12 31 48" src="https://github.com/user-attachments/assets/0521acd4-e8c4-45d3-8e46-c6c1e4616bd1">
+
+Switch to `Post.php` model. And now both models are connected with each other.
+
+<img width="372" alt="Screenshot 2024-10-02 at 12 34 02" src="https://github.com/user-attachments/assets/024cee54-37aa-493f-b05a-94d79409ba71">
+
+Lastly is factory. and set the sentence to be randomized either its 1 word or 2 words.
+
+<img width="515" alt="Screenshot 2024-10-02 at 13 30 01" src="https://github.com/user-attachments/assets/37987e61-b2d9-40b6-bfe1-0384109a7f60">
+
+And in `PostFactory`, add the category_id
+
+<img width="449" alt="Screenshot 2024-10-02 at 13 32 06" src="https://github.com/user-attachments/assets/c5020245-bfdd-4d74-a539-f3b97a17524a">
+
+Remigrate our database, make sure that theres already foreign key to user table and foreign key to category table. 
+
+<img width="613" alt="Screenshot 2024-10-02 at 13 34 05" src="https://github.com/user-attachments/assets/383cc3ad-0e5b-4651-b43b-de6d284d0383">
+
+Before we start the factory, clean up the auto loading first using `composer dumpautoload` . Wait for the optimization process. And then run `php artisan optimize:clear`.
+
+<img width="1015" alt="Screenshot 2024-10-02 at 13 36 54" src="https://github.com/user-attachments/assets/d49ce794-cbb5-4924-99f9-21db7fd88d72">
+
+<img width="1017" alt="Screenshot 2024-10-02 at 13 37 19" src="https://github.com/user-attachments/assets/d9bcdb5a-82a5-4d10-bc3d-950e4eb9a2b7">
+
+Next we will fill the data by running 3 factories in the same time, which are creating post, creating user, and creating category. User and category will be recycled. To achieve this, place the user and category factories that want to be recyled in an array.
+
+<img width="834" alt="Screenshot 2024-10-02 at 13 40 14" src="https://github.com/user-attachments/assets/782864f7-b51b-4898-94e8-10da3b2bc6c5">
+
+TablePlus Documentation:
+
+<img width="592" alt="Screenshot 2024-10-02 at 13 41 26" src="https://github.com/user-attachments/assets/f5d3ddd3-96ae-4fd3-8cca-daa3185db873">
+
+<img width="798" alt="Screenshot 2024-10-02 at 13 41 45" src="https://github.com/user-attachments/assets/fa9bf3df-6e96-4885-b681-d8a0c58bc307">
+
+It can be seen that category hasnt worked yet in the Web UI. To fix this, go to `posts.blade.php` (Post view), for the category, collect the data from table category from post model. And fix the link route to categories. But we havent created the route.
+
+<img width="979" alt="Screenshot 2024-10-02 at 13 45 18" src="https://github.com/user-attachments/assets/fd991707-49c3-4dab-b80b-28fcc7eedcf4">
+
+Fix the route in `web.php`:
+
+<img width="763" alt="Screenshot 2024-10-02 at 13 50 44" src="https://github.com/user-attachments/assets/450acbd4-c166-445f-9819-5696b4ecaf2e">
+
+<img width="1470" alt="Screenshot 2024-10-02 at 13 50 22" src="https://github.com/user-attachments/assets/c961c064-657e-43e2-9b79-d12133628c11">
+
 
 ### Database Seeder _(Video 13)_
 

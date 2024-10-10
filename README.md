@@ -613,7 +613,13 @@ Call the seeder class in the DatabaseSeeder.php and do migration and seeding aga
 
 ## Assignment Week 6
 
+### N+1 Problem _(Video 14)_
 
+### Redesign UI _(Video 15)_
+
+### Searching _(Video 16)_
+
+### Pagination _(Video 17)_
 
 
 

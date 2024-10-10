@@ -472,6 +472,145 @@ Fix the route in `web.php`:
 
 ### Database Seeder _(Video 13)_
 
+Beforehand, we have implemented factory to fill in the data randomly. Theres a simpler way by using seeder/seeding, so we like plant a data. It can also be combined with factory.
+
+Open DatabaseSeeder.php inside the Database folder
+
+First of all, refresh the migration so the database is cleared and then do `php artisan db:seed`.
+
+<img width="507" alt="Screenshot 2024-10-10 at 15 15 52" src="https://github.com/user-attachments/assets/8122500d-8d6c-410a-a774-8baa5205f208">
+
+It can be seen in TablePlus that all tables have no data except in User data, it generates 1 data from DatabaseSeeder.php
+
+```php
+    public function run(): void
+    {
+        // User::factory(10)->create();
+
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
+    }
+
+```
+
+<img width="1470" alt="Screenshot 2024-10-10 at 15 15 10" src="https://github.com/user-attachments/assets/c5bda791-06ab-466b-8ccb-66ff2faa68c9">
+
+Next, we try to create 10 new data in user table by running this:
+```php
+    public function run(): void
+    {
+        User::factory(10)->create();
+
+        /*User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]); */
+    }
+```
+
+<img width="1469" alt="Screenshot 2024-10-10 at 15 24 05" src="https://github.com/user-attachments/assets/89e2dfd6-9344-4469-b836-9836d98c07e2">
+
+If we want to insert the data manually, we can do:
+```php
+public function run(): void
+    {
+       // User::factory(10)->create();
+
+        /*User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]); */
+
+        User::create([
+            'name' => 'Tabina Callistadya',
+            'username' => 'callistadya',
+            'email' => 'callistadya@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10)
+        ]);
+    }
+```
+
+And when we refresh it, it can be seen that a new data is inserted.
+
+<img width="1340" alt="Screenshot 2024-10-10 at 15 31 33" src="https://github.com/user-attachments/assets/b3f52986-5053-4d5d-9121-c6ab5faee067">
+
+```php
+public function run(): void
+    {
+        Post::factory(100)->recycle([
+            Category::factory(3)->create(),
+            User::factory(5)->create()
+        ])->create();
+    }
+}
+```
+
+`php artisan migrate:fresh --seed` is to do migration and seeder class at the same time.
+
+If we want to create a custom data and want to recycle it with the other generated data, we can insert the custom data into a variable and then insert the variable to be recycled with the others.
+```php
+public function run(): void
+    {
+       // User::factory(10)->create();
+
+        /*User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]); */
+
+        $callista = User::create([
+            'name' => 'Tabina Callistadya',
+            'username' => 'callistadya',
+            'email' => 'callistadya@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10)
+        ]); 
+
+        Post::factory(100)->recycle([
+            Category::factory(3)->create(),
+            $callista,
+            User::factory(5)->create()
+        ])->create();
+    }
+```
+
+<img width="427" alt="Screenshot 2024-10-10 at 15 51 07" src="https://github.com/user-attachments/assets/ce5da342-b63c-4e1e-b095-3e93e8b9e553">
+
+<img width="1469" alt="Screenshot 2024-10-10 at 15 51 29" src="https://github.com/user-attachments/assets/bde3d962-b22f-4ede-b315-b42bcade5786">
+
+Lastly, if we want to seperate each seeder to each seeder class, firsly we need to create a new seeder class by using `php artisan make:seeder`
+
+<img width="611" alt="Screenshot 2024-10-10 at 15 54 05" src="https://github.com/user-attachments/assets/9254a851-2634-41d6-be9e-e6f8bfa7780a">
+
+And then fill the seeder class with the seeder, for example here for User seeder:
+
+<img width="611" alt="Screenshot 2024-10-10 at 15 55 07" src="https://github.com/user-attachments/assets/e1c115d2-6694-4163-88ff-3ef2dc3a77f4">
+
+for Category seeder:
+
+<img width="312" alt="Screenshot 2024-10-10 at 16 39 28" src="https://github.com/user-attachments/assets/1c2a7ff4-9d3e-4689-b791-a5642158f6d5">
+
+
+Call the seeder class in the DatabaseSeeder.php and do migration and seeding again by using `php artisan make:seeder`
+```php
+    public function run(): void
+    {
+        $this->call([CategorySeeder::class, UserSeeder::class]); //call the seeder class 
+        Post::factory(100)->recycle([
+            Category::all(),
+            User::all()
+        ])->create();
+    }
+```
+
+<img width="1470" alt="Screenshot 2024-10-10 at 16 45 27" src="https://github.com/user-attachments/assets/20d14c1b-b31d-4a00-b090-0090d9bb487f">
+
+
 ## Assignment Week 6
 
 

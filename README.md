@@ -661,6 +661,141 @@ If we work in teams and want to make sure that there is no programmer that use l
 ```
 
 ### Redesign UI _(Video 15)_
+In this part, we will update our website User Interface (UI) from list to card and implement flowbite or tailwindcss (with component from tailwindui). To use flowbite, we need to install it first to laravel by typing `npm install -D flowbite` and next add `"./node_modules/flowbite/**/*.js"` in content section and also `require('flowbite/plugin')` in plugins section in tailwind.config.js.
+
+Add `@vite(['resources/css/app.css','resources/js/app.js'])` inside resources/views/components/layout.blade.php and lastly add `import 'flowbite';` in resources/js/app.js . Dont forget to run build process, it is runned by npm already:
+
+<img width="466" alt="Screenshot 2024-10-10 at 21 42 20" src="https://github.com/user-attachments/assets/8719be38-88ec-45e7-9cdd-5dcc7c70bb22">
+
+Get the template from flowbite (https://flowbite.com/blocks/marketing/blog/) and copy the HTML code to resources/views/posts.blade.php . Copy the tailwind config aswell from the website to tailwind.config.js :
+```js
+/** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
+export default {
+  darkMode: 'class',
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+    "./node_modules/flowbite/**/*.js"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
+      },
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        'body': [
+    'Inter', 
+    'ui-sans-serif', 
+    'system-ui', 
+    '-apple-system', 
+    'system-ui', 
+    'Segoe UI', 
+    'Roboto', 
+    'Helvetica Neue', 
+    'Arial', 
+    'Noto Sans', 
+    'sans-serif', 
+    'Apple Color Emoji', 
+    'Segoe UI Emoji', 
+    'Segoe UI Symbol', 
+    'Noto Color Emoji'
+  ],
+      },
+    },
+  },
+  plugins: [
+    require('flowbite/plugin')
+  ],
+}
+```
+`<div class="grid gap-8 lg:grid-cols-3">` change the column from 2 to 3. 
+
+Add a new column named "color" in categories table migration.
+<img width="550" alt="Screenshot 2024-10-10 at 22 44 33" src="https://github.com/user-attachments/assets/366333ae-d354-46ed-bfa0-4f185b77c435">
+
+Add "color" in category seeder and assign different color to each category name. It will soon used to generate it based on the category name.
+```php
+   public function run(): void
+    {
+        //Category::factory(3)->create();
+
+        Category::create([
+            'name' => 'Web Design',
+            'slug' => 'web-design',
+            'color' => 'pink'
+            ]);
+
+        Category::create([
+            'name' => 'UI UX',
+            'slug' => 'ui-ux',
+            'color' => 'blue'
+            ]);
+
+        Category::create([
+            'name' => 'Machine Learning',
+            'slug' => 'machine-learning',
+            'color' => 'purple'
+        ]);
+
+        Category::create([
+            'name' => 'Data structure',
+            'slug' => 'data-structure',
+            'color' => 'red'
+            ]);
+    }
+```
+and add 
+```php 
+{{ $post->category->color }} 
+```
+in posts.blade.php . Re-migrate it and do seeding.
+
+<img width="760" alt="Screenshot 2024-10-10 at 22 53 17" src="https://github.com/user-attachments/assets/5accea70-6904-4b39-b0ce-1bccb5bbbbda">
+
+But before that, we need to create safelist class to declare the colors that we want to generate dynamically. Add this to tailwind.config.js:
+```php
+  safelist: [
+    'bg-red-100',
+    'bg-pink-100',
+    'bg-blue-100',
+    'bg-purple-100'
+  ]
+```
+
+Next, we need to modify this to get the `created_at` to the each post:
+```php
+                        <a href="/categories/{{ $post->category->slug }}">
+                        <span class="bg-{{ $post->category->color }}-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+                            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
+                            {{ $post->category->name }}
+                        </span>
+                
+                            <span class="text-sm">{{  $post->created_at->diffForHumans() }}</span>
+                        </a>
+```
+And for the title of each article:
+```php
+                    <a href="/posts/{{ $post->slug }}">
+                    <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900
+                     dark:text-white">{{  $post->title }}
+                    </a></h2>
+```
+To limit the article paragraph before click "Read More"
+```php
+                    <p class="mb-5 font-light text-gray-500 dark:text-gray-400">{{ Str::limit
+                    ($post->body, 150) }}
+                    </p>
+```
+For the author name:
+```php
+                            <img class="w-7 h-7 rounded-full" 
+                            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" 
+                            alt="{{ $post->author->name }}" />
+```
+Lastly, we will redesign the UI for each single post (post.blade.php). Before that, browse blog template in flowbite(https://flowbite.com/blocks/publisher/blog-templates/). Copy both HTML and tailwind code to the project. Before proceeding, install the typography using `npm i -D flowbite-typography`. and add `require('flowbite-typography'),` in pluggin section in tailwind.conf.js .
 
 ### Searching _(Video 16)_
 

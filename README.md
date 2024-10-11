@@ -5,7 +5,7 @@
 | :--------: | :------------: |
 | 5025221318 | Tabina Callistadya |
 
-# Framework-based Programming
+# Framework-based Programming: Laravel 11 Framework
 
 </div>
 
@@ -614,6 +614,51 @@ Call the seeder class in the DatabaseSeeder.php and do migration and seeding aga
 ## Assignment Week 6
 
 ### N+1 Problem _(Video 14)_
+N+1 occurs when there is too many query because of looping. One looping adds one query. There should be only 2 queries, to post and user table. So there are a lot of unnecessary query in a page. To know if our query is ineffective, we need to investigate how many queries are executed in one page by using DebugBar. To download DebugBar, type `composer require barryvdh/laravel-debugbar --dev` in terminal(Source: https://github.com/barryvdh/laravel-debugbar). Use DebugBar while in development mode and do not on public. DebugBar will be shown in the bottom of the page. 
+
+As we can see that there are 201 queries executed in blog page (4 of them are used by laravel session). Because we have 2 features, lazyloading occurs. Lazy loading is beneficial so we dont have to mind about query, but it is also the reason N+1 problem occurs. To overcome this situation, Eager loading (the opposite of lazy loading). Eager Loading loads everything in the beginning by using `$with` method when we call a data.
+
+```php
+Route::get('/posts', function () {
+   $posts = Post::with(['author', 'category'])->latest()->get();
+    return view('posts', ['title' => 'Blog', 'posts'=> $posts ]);
+});
+```
+This reduces the query in blog page down to 6. This is also happens on author page, use Lazy Eager Loading. Because the parent has been retrieved. 
+
+```php
+Route::get('/authors/{user:username}', function(User $user){
+    $posts = $user->posts->load('category', 'author');
+    return view('posts', ['title' => count($posts) .'Articles by '. $user->name, 'posts' => $user->posts]);
+});
+```
+So the queries down to 7, and now do the same to the category:
+```php
+Route::get('/categories/{category:slug}', function(Category $category){
+    $posts = $category->posts->load('category', 'author');
+    return view('posts', ['title' => 'Articles in: '. $category->name, 'posts' => $posts]);
+});
+```
+and down to 7.
+
+Now, we can do this automatically from the model with Eagle Loading by Default by adding `$with` property inside the model. Go to model post (post.php) and add `protected $with = ['author', 'category'];`.
+
+Blog query:
+<img width="1469" alt="Screenshot 2024-10-10 at 20 56 15" src="https://github.com/user-attachments/assets/a9d30d55-b948-45bf-8323-f95fb71aab56">
+
+Author query:
+<img width="1470" alt="Screenshot 2024-10-10 at 20 59 45" src="https://github.com/user-attachments/assets/291ebeec-c9b8-471a-8dc7-0b37b99ac68a">
+
+Category query:
+<img width="1470" alt="Screenshot 2024-10-10 at 21 00 06" src="https://github.com/user-attachments/assets/d4dbb35f-9b3b-412a-81b7-ea0ea7a33f52">
+
+If we work in teams and want to make sure that there is no programmer that use lazy loading, we can protect it by go to `App/Providers/AppServiceProvider.php` and insert at boot method. 
+```php
+    public function boot(): void
+    {
+        Model::preventLazyLoading();
+    }
+```
 
 ### Redesign UI _(Video 15)_
 
